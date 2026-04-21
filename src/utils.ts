@@ -1,8 +1,11 @@
 import type { EvaluatedGuess } from './types.ts';
+import { WORD_LIST } from './data.ts';
+
+const WORD_SET: Set<string> = new Set(WORD_LIST);
 
 export const evaluateGuess = (guess: string, solution: string): EvaluatedGuess => {
-  const guessLetters = guess.toUpperCase().split('');
-  const solutionLetters = solution.toUpperCase().split('');
+  const guessLetters = guess.toLowerCase().split('');
+  const solutionLetters = solution.toLowerCase().split('');
   const used = Array(5).fill(false);
 
   const statuses: EvaluatedGuess = guessLetters.map(letter => ({ letter: letter, status: 'absent' }))
@@ -27,4 +30,8 @@ export const evaluateGuess = (guess: string, solution: string): EvaluatedGuess =
   }
 
   return statuses;
+}
+
+export const isValidWord = (guess: string): boolean => {
+  return WORD_SET.has(guess.toLowerCase());
 }
