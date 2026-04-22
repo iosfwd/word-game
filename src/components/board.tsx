@@ -1,5 +1,6 @@
 import Row from './row';
 import type { EvaluatedGuess, GameStatus } from '../types';
+import styles from './board.module.css';
 
 type Props = {
   guesses: EvaluatedGuess[];
@@ -9,7 +10,7 @@ type Props = {
 
 const Board = ({ guesses, currentGuess, gameStatus }: Props) => {
   return (
-    <div>
+    <div className={styles.board}>
       {Array.from({ length: 6}).map((_, i) => {
 	if (i < guesses.length) {
 	  return <Row key={i} status={'committed'} guess={guesses[i]} />;
