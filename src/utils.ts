@@ -45,3 +45,7 @@ export const getGameStatus = (guesses: EvaluatedGuess[]): GameStatus => {
     return 'ongoing';
   }
 }
+
+export const getRandomWord = (): string => {
+  return WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)];
+}
