@@ -1,4 +1,4 @@
-import type { EvaluatedGuess } from './types.ts';
+import type { EvaluatedGuess, GameStatus } from './types.ts';
 import { WORD_LIST } from './data.ts';
 
 const WORD_SET: Set<string> = new Set(WORD_LIST);
@@ -34,4 +34,14 @@ export const evaluateGuess = (guess: string, solution: string): EvaluatedGuess =
 
 export const isValidWord = (guess: string): boolean => {
   return WORD_SET.has(guess.toLowerCase());
+}
+
+export const getGameStatus = (guesses: EvaluatedGuess[]): GameStatus => {
+  if (guesses.at(-1)?.every((g) => (g.status === 'correct'))) {
+    return 'won';
+  } else if (guesses.length === 6) {
+    return 'lost';
+  } else {
+    return 'ongoing';
+  }
 }

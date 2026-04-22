@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { evaluateGuess, isValidWord } from './utils';
+import { evaluateGuess, isValidWord, getGameStatus } from './utils';
+import type { EvaluatedGuess } from './types';
 
 describe('evaluateGuess', () => {
   test('all correct', () => {
@@ -82,5 +83,35 @@ describe('isValidWord', () => {
 
   test('too long', () => {
     expect(isValidWord('program')).toBe(false)
+  })
+})
+
+describe('getGameStatus', () => {
+  test('won', () => {
+    const guesses: EvaluatedGuess[] = [];
+    guesses.push(evaluateGuess('sigma', 'sigma'));
+    expect(getGameStatus(guesses)).toEqual('won');
+  })
+
+  test('won', () => {
+    const guesses: EvaluatedGuess[] = [];
+    guesses.push(evaluateGuess('salet', 'sigma'));
+    expect(getGameStatus(guesses)).toEqual('ongoing');
+  })
+
+  test('empty ongoing', () => {
+    const guesses: EvaluatedGuess[] = [];
+    expect(getGameStatus(guesses)).toEqual('ongoing');
+  })
+
+  test('lost', () => {
+    const guesses: EvaluatedGuess[] = [];
+    guesses.push(evaluateGuess('salet', 'ozone'));
+    guesses.push(evaluateGuess('sigma', 'ozone'));
+    guesses.push(evaluateGuess('pudgy', 'ozone'));
+    guesses.push(evaluateGuess('lemon', 'ozone'));
+    guesses.push(evaluateGuess('runic', 'ozone'));
+    guesses.push(evaluateGuess('crone', 'ozone'));
+    expect(getGameStatus(guesses)).toEqual('lost');
   })
 })

@@ -8,3 +8,5 @@ export type EvaluatedGuess = {
 export type TileStatus = LetterStatus | 'empty' | 'tbd';
 
 export type RowStatus = 'empty' | 'active' | 'committed';
+
+export type GameStatus = 'ongoing' | 'won' | 'lost';
