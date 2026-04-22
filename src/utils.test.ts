@@ -93,7 +93,7 @@ describe('getGameStatus', () => {
     expect(getGameStatus(guesses)).toEqual('won');
   })
 
-  test('won', () => {
+  test('ongoing after wrong guess', () => {
     const guesses: EvaluatedGuess[] = [];
     guesses.push(evaluateGuess('salet', 'sigma'));
     expect(getGameStatus(guesses)).toEqual('ongoing');
@@ -114,4 +114,16 @@ describe('getGameStatus', () => {
     guesses.push(evaluateGuess('crone', 'ozone'));
     expect(getGameStatus(guesses)).toEqual('lost');
   })
+
+  test('last correct', () => {
+    const guesses: EvaluatedGuess[] = [];
+    guesses.push(evaluateGuess('salet', 'ozone'));
+    guesses.push(evaluateGuess('sigma', 'ozone'));
+    guesses.push(evaluateGuess('pudgy', 'ozone'));
+    guesses.push(evaluateGuess('lemon', 'ozone'));
+    guesses.push(evaluateGuess('runic', 'ozone'));
+    guesses.push(evaluateGuess('ozone', 'ozone'));
+    expect(getGameStatus(guesses)).toEqual('won');
+  })
+
 })
