@@ -23,9 +23,9 @@ const Keyboard = ({ onLetter, onBackspace, onEnter, letterStatuses }: Props) => 
 	{MID_ROW.map(label => <Key key={label} label={label} status={letterStatuses.get(label)} onClick={() => onLetter(label)}/>)}
       </div>
       <div className={styles.row}>
-	<Key key={'enter'} label={'enter'} onClick={onEnter} />
+	<Key key={'enter'} label={'enter'} onClick={onEnter} wide={true}/>
 	{BOT_ROW.map(label => <Key key={label} label={label} status={letterStatuses.get(label)} onClick={() => onLetter(label)}/>)}
-	<Key key={'del'} label={'del'} onClick={onBackspace} />
+	<Key key={'del'} label={'del'} onClick={onBackspace} wide={true} />
       </div>
     </div>
   )
