@@ -3,6 +3,7 @@ import { evaluateGuess, isValidWord, getRandomWord, getGameStatus } from './util
 import type { EvaluatedGuess, GameStatus } from './types';
 import styles from './app.module.css';
 import { useState, useEffect, useCallback } from 'react';
+import Keyboard from './components/keyboard';
 
 const App = () => {
   const [solution] = useState<string>(getRandomWord());
@@ -53,6 +54,11 @@ const App = () => {
   return (
     <div className={styles.app}>
       <Board guesses={guesses} currentGuess={currentGuess} gameStatus={gameStatus} />
+      <Keyboard
+	onLetter={handleLetter}
+	onBackspace={handleBackspace}
+	onEnter={handleEnter}
+      />
     </div>
   )
 }
