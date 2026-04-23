@@ -1,6 +1,6 @@
 import Board from './components/board';
-import { evaluateGuess, isValidWord, getRandomWord, getGameStatus } from './utils';
-import type { EvaluatedGuess, GameStatus } from './types';
+import { evaluateGuess, isValidWord, getRandomWord, getGameStatus, initLetterStatuses, updateLetterStatuses } from './utils';
+import type { EvaluatedGuess, GameStatus, KeyStatus } from './types';
 import styles from './app.module.css';
 import { useState, useEffect, useCallback } from 'react';
 import Keyboard from './components/keyboard';
@@ -10,6 +10,7 @@ const App = () => {
   const [guesses, setGuesses] = useState<EvaluatedGuess[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>('');
   const [gameStatus, setGameStatus] = useState<GameStatus>('ongoing');
+  const [letterStatuses, setLetterStatuses] = useState<Map<string, KeyStatus>>(initLetterStatuses);
 
   const handleLetter = useCallback((letter: string) => {
     if (currentGuess.length < 5 && gameStatus === 'ongoing') {
@@ -32,6 +33,7 @@ const App = () => {
 	setGuesses(newGuesses);
 	setGameStatus(getGameStatus(newGuesses));
 	setCurrentGuess('');
+	setLetterStatuses(prev => updateLetterStatuses(prev, retval));
       }
     }
   }, [currentGuess, guesses, gameStatus]);
@@ -53,11 +55,16 @@ const App = () => {
 
   return (
     <div className={styles.app}>
-      <Board guesses={guesses} currentGuess={currentGuess} gameStatus={gameStatus} />
+      <Board
+	guesses={guesses}
+	currentGuess={currentGuess}
+	gameStatus={gameStatus}
+      />
       <Keyboard
 	onLetter={handleLetter}
 	onBackspace={handleBackspace}
 	onEnter={handleEnter}
+	letterStatuses={letterStatuses}
       />
     </div>
   )

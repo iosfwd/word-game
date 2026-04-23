@@ -1,5 +1,6 @@
 import Key from './key';
 import styles from './keyboard.module.css';
+import type { KeyStatus } from '../types';
 
 const TOP_ROW = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
 const MID_ROW = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'];
@@ -9,21 +10,22 @@ type Props = {
   onLetter: (letter: string) => void;
   onBackspace: () => void;
   onEnter: () => void;
+  letterStatuses: Map<string, KeyStatus>;
 }
 
-const Keyboard = ({onLetter, onBackspace, onEnter}: Props) => {
+const Keyboard = ({ onLetter, onBackspace, onEnter, letterStatuses }: Props) => {
   return (
     <div className={styles.keyboard}>
       <div className={styles.row}>
-	{TOP_ROW.map(label => <Key label={label} onClick={() => onLetter(label)}/>)}
+	{TOP_ROW.map(label => <Key key={label} label={label} status={letterStatuses.get(label)} onClick={() => onLetter(label)}/>)}
       </div>
       <div className={styles.row}>
-	{MID_ROW.map(label => <Key label={label} onClick={() => onLetter(label)}/>)}
+	{MID_ROW.map(label => <Key key={label} label={label} status={letterStatuses.get(label)} onClick={() => onLetter(label)}/>)}
       </div>
       <div className={styles.row}>
-	<Key label={'enter'} onClick={onEnter} />
-	{BOT_ROW.map(label => <Key label={label} onClick={() => onLetter(label)}/>)}
-	<Key label={'del'} onClick={onBackspace} />
+	<Key key={'enter'} label={'enter'} onClick={onEnter} />
+	{BOT_ROW.map(label => <Key key={label} label={label} status={letterStatuses.get(label)} onClick={() => onLetter(label)}/>)}
+	<Key key={'del'} label={'del'} onClick={onBackspace} />
       </div>
     </div>
   )
