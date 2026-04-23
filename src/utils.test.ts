@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest'
-import { evaluateGuess, isValidWord, getGameStatus } from './utils';
-import type { EvaluatedGuess } from './types';
+import { beforeEach, describe, expect, test } from 'vitest'
+import { evaluateGuess, isValidWord, getGameStatus, initLetterStatuses, updateLetterStatus } from './utils';
+import type { EvaluatedGuess, KeyStatus } from './types';
 
 describe('evaluateGuess', () => {
   test('all correct', () => {
@@ -125,5 +125,39 @@ describe('getGameStatus', () => {
     guesses.push(evaluateGuess('ozone', 'ozone'));
     expect(getGameStatus(guesses)).toEqual('won');
   })
+})
 
+describe('updateLetterStatus', () => {
+  let letterStatuses: Map<string, KeyStatus>;
+
+  beforeEach(() => {
+    letterStatuses = initLetterStatuses();
+  })
+
+  test('unused to absent', () => {
+    letterStatuses = updateLetterStatus(letterStatuses, 'z', 'absent');
+    expect(letterStatuses.get('z')).toEqual('absent');
+  })
+
+  test('unused to present', () => {
+    letterStatuses = updateLetterStatus(letterStatuses, 'z', 'present');
+    expect(letterStatuses.get('z')).toEqual('present');
+  })
+
+  test('unused to correct', () => {
+    letterStatuses = updateLetterStatus(letterStatuses, 'z', 'correct');
+    expect(letterStatuses.get('z')).toEqual('correct');
+  })
+
+  test('present to correct', () => {
+    letterStatuses = updateLetterStatus(letterStatuses, 'z', 'present');
+    letterStatuses = updateLetterStatus(letterStatuses, 'z', 'correct');
+    expect(letterStatuses.get('z')).toEqual('correct');
+  })
+
+  test('correct to present remains correct', () => {
+    letterStatuses = updateLetterStatus(letterStatuses, 'z', 'correct');
+    letterStatuses = updateLetterStatus(letterStatuses, 'z', 'present');
+    expect(letterStatuses.get('z')).toEqual('correct');
+  })
 })

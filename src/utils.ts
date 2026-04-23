@@ -1,4 +1,4 @@
-import type { EvaluatedGuess, GameStatus } from './types.ts';
+import type { EvaluatedGuess, GameStatus, KeyStatus, LetterStatus } from './types.ts';
 import { WORD_LIST } from './data.ts';
 
 const WORD_SET: Set<string> = new Set(WORD_LIST);
@@ -48,4 +48,59 @@ export const getGameStatus = (guesses: EvaluatedGuess[]): GameStatus => {
 
 export const getRandomWord = (): string => {
   return WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)];
+}
+
+export const initLetterStatuses = () =>
+  new Map<string, KeyStatus>([
+    ['a', 'unused'],
+    ['b', 'unused'],
+    ['c', 'unused'],
+    ['d', 'unused'],
+    ['e', 'unused'],
+    ['f', 'unused'],
+    ['g', 'unused'],
+    ['h', 'unused'],
+    ['i', 'unused'],
+    ['j', 'unused'],
+    ['k', 'unused'],
+    ['l', 'unused'],
+    ['m', 'unused'],
+    ['n', 'unused'],
+    ['o', 'unused'],
+    ['p', 'unused'],
+    ['q', 'unused'],
+    ['r', 'unused'],
+    ['s', 'unused'],
+    ['t', 'unused'],
+    ['u', 'unused'],
+    ['v', 'unused'],
+    ['w', 'unused'],
+    ['x', 'unused'],
+    ['y', 'unused'],
+    ['z', 'unused']
+  ]);
+
+const STATUS_WEIGHT: Record<KeyStatus, number> = {
+  unused: 0,
+  absent: 1,
+  present: 2,
+  correct: 3,
+};
+
+export const updateLetterStatus = (
+  statuses: Map<string, KeyStatus>,
+  letter: string,
+  status: LetterStatus
+): Map<string, KeyStatus> => {
+  const statusWeight = STATUS_WEIGHT[status ?? 'unused'];
+  const prev = statuses.get(letter);
+  const prevWeight = STATUS_WEIGHT[prev ?? 'unused'];
+
+  if (statusWeight > prevWeight) {
+    const newStatuses = new Map(statuses);
+    newStatuses.set(letter, status);
+    return newStatuses;
+  }
+
+  return statuses;
 }
