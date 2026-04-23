@@ -12,7 +12,7 @@ const App = () => {
   const [guesses, setGuesses] = useState<EvaluatedGuess[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>('');
   const [gameStatus, setGameStatus] = useState<GameStatus>('ongoing');
-  const [letterStatuses, setLetterStatuses] = useState<Map<string, KeyStatus>>(initLetterStatuses());
+  const [letterStatuses, setLetterStatuses] = useState<Map<string, KeyStatus>>(initLetterStatuses) // lazy init
   const { toast, showToast } = useToast(2000);
 
   const handleLetter = useCallback((letter: string) => {
@@ -43,7 +43,7 @@ const App = () => {
 	    showToast(solution.toUpperCase())
 	  }
 
-	  setGameStatus(getGameStatus(newGuesses));
+	  setGameStatus(newGameStatus);
 	  setCurrentGuess('');
 	  setLetterStatuses(prev => updateLetterStatuses(prev, retval));
 	} else {
@@ -53,7 +53,7 @@ const App = () => {
 	showToast('Not enough letters')
       }
     }
-  }, [currentGuess, guesses, gameStatus, showToast]);
+  }, [currentGuess, guesses, gameStatus, showToast, solution]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -90,4 +90,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
