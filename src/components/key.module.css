@@ -1,15 +1,20 @@
 .key {
-  width: 36px;
-  height: 48px;
-  display: grid;
-  place-items: center;
+    min-width: 36px;
+    padding: 4px;
+    height: 48px;
+    display: grid;
+    place-items: center;
 
-  background: #ccc;
-  border-radius: 12.5%;
+    background: lightgray;
+    border-radius: 12.5%;
+    border: none;
 
-  font-size: 1.25rem;
-  font-weight: bold;
-  text-transform: uppercase;
+    font-family: inherit;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+
+    cursor: pointer;
 }
 
 .key[data-status='correct'] {
