@@ -3,14 +3,15 @@ import styles from './key.module.css';
 
 type Props = {
   label: string;
-  status: KeyStatus;
+  status?: KeyStatus;
+  onClick: () => void;
 }
 
-const Key = ({ label, status = 'unused' }: Props) => {
+const Key = ({ label, status = 'unused', onClick }: Props) => {
   return (
-    <div className={styles.key} data-status={status}>
+    <button className={styles.key} data-status={status} onClick={onClick}>
       {label}
-    </div>
+    </button>
   )
 }
 
