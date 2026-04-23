@@ -10,7 +10,7 @@ const App = () => {
   const [guesses, setGuesses] = useState<EvaluatedGuess[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>('');
   const [gameStatus, setGameStatus] = useState<GameStatus>('ongoing');
-  const [letterStatuses, setLetterStatuses] = useState<Map<string, KeyStatus>>(initLetterStatuses);
+  const [letterStatuses, setLetterStatuses] = useState<Map<string, KeyStatus>>(initLetterStatuses());
 
   const handleLetter = useCallback((letter: string) => {
     if (currentGuess.length < 5 && gameStatus === 'ongoing') {
@@ -22,7 +22,7 @@ const App = () => {
     if (gameStatus === 'ongoing') {
       setCurrentGuess(prev => prev.slice(0, -1))
     }
-  }, [currentGuess, gameStatus]);
+  }, [gameStatus]);
 
   const handleEnter = useCallback(() => {
     if (currentGuess.length === 5 && gameStatus === 'ongoing') {
