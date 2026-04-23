@@ -11,7 +11,7 @@ type Props = {
 const Board = ({ guesses, currentGuess, gameStatus }: Props) => {
   return (
     <div className={styles.board}>
-      {Array.from({ length: 6}).map((_, i) => {
+      {Array.from({ length: 6 }).map((_, i) => {
 	if (i < guesses.length) {
 	  return <Row key={i} status={'committed'} guess={guesses[i]} />;
 	} else if (i === guesses.length && gameStatus === 'ongoing') {
