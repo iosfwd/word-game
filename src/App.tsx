@@ -28,16 +28,29 @@ const App = () => {
   }, [gameStatus]);
 
   const handleEnter = useCallback(() => {
-    if (currentGuess.length === 5 && gameStatus === 'ongoing') {
-      if (isValidWord(currentGuess)) {
-	const retval = evaluateGuess(currentGuess, solution);
-	const newGuesses = [...guesses, retval];
-	setGuesses(newGuesses);
-	setGameStatus(getGameStatus(newGuesses));
-	setCurrentGuess('');
-	setLetterStatuses(prev => updateLetterStatuses(prev, retval));
+    if (gameStatus === 'ongoing') {
+      if (currentGuess.length === 5) {
+	if (isValidWord(currentGuess)) {
+	  const retval = evaluateGuess(currentGuess, solution);
+	  const newGuesses = [...guesses, retval];
+	  setGuesses(newGuesses);
+
+	  const newGameStatus = getGameStatus(newGuesses);
+
+	  if (newGameStatus === 'won') {
+	    showToast('Bravissimo')
+	  } else if (newGameStatus === 'lost') {
+	    showToast(solution.toUpperCase())
+	  }
+
+	  setGameStatus(getGameStatus(newGuesses));
+	  setCurrentGuess('');
+	  setLetterStatuses(prev => updateLetterStatuses(prev, retval));
+	} else {
+	  showToast('Not in word list');
+	}
       } else {
-	showToast('Invalid word');
+	showToast('Not enough letters')
       }
     }
   }, [currentGuess, guesses, gameStatus, showToast]);
@@ -66,6 +79,7 @@ const App = () => {
 	currentGuess={currentGuess}
 	gameStatus={gameStatus}
       />
+
       <Keyboard
 	onLetter={handleLetter}
 	onBackspace={handleBackspace}
