@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest'
-import { evaluateGuess, isValidWord, getGameStatus, initLetterStatuses, updateLetterStatus } from './utils';
+import { evaluateGuess, isValidWord, getGameStatus, initLetterStatuses, updateLetterStatus, updateLetterStatuses } from './utils';
 import type { EvaluatedGuess, KeyStatus } from './types';
 
 describe('evaluateGuess', () => {
@@ -159,5 +159,38 @@ describe('updateLetterStatus', () => {
     letterStatuses = updateLetterStatus(letterStatuses, 'z', 'correct');
     letterStatuses = updateLetterStatus(letterStatuses, 'z', 'present');
     expect(letterStatuses.get('z')).toEqual('correct');
+  })
+})
+
+describe('updateLetterStatuses', () => {
+  let letterStatuses: Map<string, KeyStatus>;
+
+  beforeEach(() => {
+    letterStatuses = initLetterStatuses();
+  })
+
+  test('base case', () => {
+    const guess = evaluateGuess('salet', 'sigma');
+    letterStatuses = updateLetterStatuses(letterStatuses, guess);
+    expect.soft(letterStatuses.get('s')).toEqual('correct');
+    expect.soft(letterStatuses.get('a')).toEqual('present');
+    expect.soft(letterStatuses.get('l')).toEqual('absent');
+    expect.soft(letterStatuses.get('e')).toEqual('absent');
+    expect.soft(letterStatuses.get('t')).toEqual('absent');
+    expect.soft(letterStatuses.get('i')).toEqual('unused');
+    expect.soft(letterStatuses.get('g')).toEqual('unused');
+    expect.soft(letterStatuses.get('m')).toEqual('unused');
+  })
+
+  test('repeated letter', () => {
+    const guess = evaluateGuess('speed', 'abcde');
+    letterStatuses = updateLetterStatuses(letterStatuses, guess);
+    expect.soft(letterStatuses.get('s')).toEqual('absent');
+    expect.soft(letterStatuses.get('p')).toEqual('absent');
+    expect.soft(letterStatuses.get('e')).toEqual('present');
+    expect.soft(letterStatuses.get('d')).toEqual('present');
+    expect.soft(letterStatuses.get('a')).toEqual('unused');
+    expect.soft(letterStatuses.get('b')).toEqual('unused');
+    expect.soft(letterStatuses.get('c')).toEqual('unused');
   })
 })

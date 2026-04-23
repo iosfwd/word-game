@@ -104,3 +104,12 @@ export const updateLetterStatus = (
 
   return statuses;
 }
+
+export const updateLetterStatuses = (
+  statuses: Map<string, KeyStatus>,
+  guess: EvaluatedGuess
+): Map<string, KeyStatus> => {
+  return guess.reduce((acc, { letter, status }) => {
+    return updateLetterStatus(acc, letter, status);
+  }, statuses);
+}
