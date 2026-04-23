@@ -1,0 +1,29 @@
+.key {
+  width: 36px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+
+  background: #ccc;
+  border-radius: 12.5%;
+
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.key[data-status='correct'] {
+    background: green;
+}
+.key[data-status='present'] {
+    background: goldenrod;
+}
+.key[data-status='absent'] {
+    background: gray;
+}
+
+.key[data-status='correct'],
+.key[data-status='present'],
+.key[data-status='absent'] {
+    color: white;
+}
