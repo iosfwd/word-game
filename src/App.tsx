@@ -4,6 +4,8 @@ import type { EvaluatedGuess, GameStatus, KeyStatus } from './types';
 import styles from './app.module.css';
 import { useState, useEffect, useCallback } from 'react';
 import Keyboard from './components/keyboard';
+import Toast from './components/toast';
+import useToast from './hooks/useToast';
 
 const App = () => {
   const [solution] = useState<string>(getRandomWord());
@@ -11,6 +13,7 @@ const App = () => {
   const [currentGuess, setCurrentGuess] = useState<string>('');
   const [gameStatus, setGameStatus] = useState<GameStatus>('ongoing');
   const [letterStatuses, setLetterStatuses] = useState<Map<string, KeyStatus>>(initLetterStatuses());
+  const { toast, showToast } = useToast(2000);
 
   const handleLetter = useCallback((letter: string) => {
     if (currentGuess.length < 5 && gameStatus === 'ongoing') {
@@ -26,7 +29,6 @@ const App = () => {
 
   const handleEnter = useCallback(() => {
     if (currentGuess.length === 5 && gameStatus === 'ongoing') {
-      // TODO: handle invalid word
       if (isValidWord(currentGuess)) {
 	const retval = evaluateGuess(currentGuess, solution);
 	const newGuesses = [...guesses, retval];
@@ -34,9 +36,11 @@ const App = () => {
 	setGameStatus(getGameStatus(newGuesses));
 	setCurrentGuess('');
 	setLetterStatuses(prev => updateLetterStatuses(prev, retval));
+      } else {
+	showToast('Invalid word');
       }
     }
-  }, [currentGuess, guesses, gameStatus]);
+  }, [currentGuess, guesses, gameStatus, showToast]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -55,6 +59,8 @@ const App = () => {
 
   return (
     <div className={styles.app}>
+      <Toast message={toast} />
+
       <Board
 	guesses={guesses}
 	currentGuess={currentGuess}
