@@ -1,4 +1,4 @@
-import type { EvaluatedGuess } from '../types';
+import type { EvaluatedGuess, Animation } from '../types';
 import Tile from './tile';
 import styles from './row.module.css';
 
@@ -14,7 +14,7 @@ const Row = (props: Props) => {
       return (
 	<div className={styles.row}>
 	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile key={i} letter={props.letters[i]} status={props.letters[i] ? 'tbd' : 'empty'} index={i} />
+	    <Tile key={i} letter={props.letters[i]} status={props.letters[i] ? 'tbd' : 'empty'} index={i} animation={props.letters[i] ? 'pop' : 'none'}/>
 	  ))}
 	</div>
       );
@@ -22,7 +22,7 @@ const Row = (props: Props) => {
       return (
 	<div className={styles.row}>
 	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile key={i} letter={props.guess[i].letter} status={props.guess[i].status} index={i} />
+	    <Tile key={i} letter={props.guess[i].letter} status={props.guess[i].status} index={i} animation={'none'} />
 	  ))}
 	</div>
       );
@@ -31,7 +31,7 @@ const Row = (props: Props) => {
       return (
 	<div className={styles.row}>
 	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile key={i} status={'empty'} index={i} />
+	    <Tile key={i} status={'empty'} index={i} animation={'none'} />
 	  ))}
 	</div>
       );
