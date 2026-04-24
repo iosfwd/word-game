@@ -1,12 +1,12 @@
 .toast {
-    position: fixed;
-    top: 5%;
-    left: 50%;
-    transform: translateX(-50%);
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
 
-    background: black;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: bold;
+  background: black;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
 }

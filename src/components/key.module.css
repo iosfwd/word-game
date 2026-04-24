@@ -1,38 +1,38 @@
 .key {
-    min-width: 36px;
-    padding: 4px;
-    height: 48px;
-    display: grid;
-    place-items: center;
+  min-width: 36px;
+  padding: 4px;
+  height: 48px;
+  display: grid;
+  place-items: center;
 
-    background: lightgray;
-    border-radius: 12.5%;
-    border: none;
+  background: lightgray;
+  border-radius: 12.5%;
+  border: none;
 
-    font-family: inherit;
-    font-size: 1.25rem;
-    font-weight: bold;
-    text-transform: uppercase;
+  font-family: inherit;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .key[data-status='correct'] {
-    background: green;
+  background: green;
 }
 .key[data-status='present'] {
-    background: goldenrod;
+  background: goldenrod;
 }
 .key[data-status='absent'] {
-    background: gray;
+  background: gray;
 }
 
 .key[data-status='correct'],
 .key[data-status='present'],
 .key[data-status='absent'] {
-    color: white;
+  color: white;
 }
 
 .wide {
-    font-size: 0.75rem;
+  font-size: 0.75rem;
 }
