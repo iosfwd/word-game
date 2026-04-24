@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 type Props = {
   letter?: string;
   status: TileStatus;
+  index: number;
 }
 
-const Tile = ({ letter = '', status = 'empty' }: Props) => {
+const Tile = ({ letter = '', status = 'empty', index }: Props) => {
   const [pop, setPop] = useState(false);
 
   useEffect(() => {

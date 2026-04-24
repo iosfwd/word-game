@@ -14,7 +14,7 @@ const Row = (props: Props) => {
       return (
 	<div className={styles.row}>
 	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile key={i} letter={props.letters[i]} status={props.letters[i] ? 'tbd' : 'empty'} />
+	    <Tile key={i} letter={props.letters[i]} status={props.letters[i] ? 'tbd' : 'empty'} index={i} />
 	  ))}
 	</div>
       );
@@ -22,7 +22,7 @@ const Row = (props: Props) => {
       return (
 	<div className={styles.row}>
 	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile key={i} letter={props.guess[i].letter} status={props.guess[i].status} />
+	    <Tile key={i} letter={props.guess[i].letter} status={props.guess[i].status} index={i} />
 	  ))}
 	</div>
       );
@@ -31,7 +31,7 @@ const Row = (props: Props) => {
       return (
 	<div className={styles.row}>
 	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile key={i} status={'empty'} />
+	    <Tile key={i} status={'empty'} index={i} />
 	  ))}
 	</div>
       );
