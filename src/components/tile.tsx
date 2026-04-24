@@ -17,7 +17,12 @@ const Tile = ({ letter = '', status = 'empty' }: Props) => {
   }, [letter]);
 
   return (
-    <div className={`${styles.tile} ${pop ? styles.pop : ''}`} data-status={status} onAnimationEnd={() => setPop(false)}>
+    <div
+      className={styles.tile}
+      data-status={status}
+      data-animation={pop ? 'pop' : ''}
+      onAnimationEnd={() => setPop(false)}
+    >
       {letter}
     </div>
   )

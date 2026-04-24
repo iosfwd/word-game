@@ -31,7 +31,7 @@
     color: white;
 }
 
-.pop {
+.tile[data-animation='pop'] {
   animation: pop 0.1s ease;
 }
 
