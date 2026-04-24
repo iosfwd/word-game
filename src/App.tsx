@@ -1,6 +1,6 @@
 import Board from './components/board';
 import { evaluateGuess, isValidWord, getRandomWord, getGameStatus, initLetterStatuses, updateLetterStatuses } from './utils';
-import type { EvaluatedGuess, GameStatus, KeyStatus } from './types';
+import type { RowAnimation, EvaluatedGuess, GameStatus, KeyStatus } from './types';
 import styles from './app.module.css';
 import { useState, useEffect, useCallback } from 'react';
 import Keyboard from './components/keyboard';
@@ -14,6 +14,7 @@ const App = () => {
   const [gameStatus, setGameStatus] = useState<GameStatus>('ongoing');
   const [letterStatuses, setLetterStatuses] = useState<Map<string, KeyStatus>>(initLetterStatuses) // lazy init
   const { toast, showToast } = useToast(2000);
+  const [rowAnimation, setRowAnimation] = useState<RowAnimation>('none');
 
   const handleLetter = useCallback((letter: string) => {
     if (currentGuess.length < 5 && gameStatus === 'ongoing') {
@@ -48,9 +49,11 @@ const App = () => {
 	  setLetterStatuses(prev => updateLetterStatuses(prev, retval));
 	} else {
 	  showToast('Not in word list');
+	  setRowAnimation('shake');
 	}
       } else {
-	showToast('Not enough letters')
+	showToast('Not enough letters');
+	setRowAnimation('shake');
       }
     }
   }, [currentGuess, guesses, gameStatus, showToast, solution]);
@@ -78,6 +81,8 @@ const App = () => {
 	guesses={guesses}
 	currentGuess={currentGuess}
 	gameStatus={gameStatus}
+	rowAnimation={rowAnimation}
+	onRowAnimationEnd={() => setRowAnimation('none')}
       />
 
       <Keyboard

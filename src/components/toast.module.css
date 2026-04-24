@@ -9,4 +9,5 @@
   padding: 8px 16px;
   border-radius: 4px;
   font-weight: bold;
+  z-index: 100;
 }

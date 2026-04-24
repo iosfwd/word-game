@@ -13,4 +13,6 @@ export type GameStatus = 'ongoing' | 'won' | 'lost';
 
 export type KeyStatus = LetterStatus | 'unused';
 
-export type Animation  = 'pop' | 'flip' | 'none';
+export type TileAnimation  = 'pop' | 'flip' | 'none';
+
+export type RowAnimation  = 'shake' | 'bounce' | 'none';
