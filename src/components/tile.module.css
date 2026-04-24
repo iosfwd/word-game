@@ -30,3 +30,19 @@
 .tile[data-status='absent'] {
     color: white;
 }
+
+.pop {
+  animation: pop 0.1s ease;
+}
+
+@keyframes pop {
+    from {
+	transform: scale(0.8);
+	opacity: 0;
+    }
+
+    40% {
+	transform: scale(1.1);
+	opacity: 1;
+    }
+}
