@@ -15,6 +15,7 @@ const App = () => {
   const [letterStatuses, setLetterStatuses] = useState<Map<string, KeyStatus>>(initLetterStatuses) // lazy init
   const { toast, showToast } = useToast(2000);
   const [rowAnimation, setRowAnimation] = useState<RowAnimation>('none');
+  const [isFlipping, setIsFlipping]  = useState(false);
 
   const handleLetter = useCallback((letter: string) => {
     if (currentGuess.length < 5 && gameStatus === 'ongoing') {
@@ -32,6 +33,7 @@ const App = () => {
     if (gameStatus === 'ongoing') {
       if (currentGuess.length === 5) {
 	if (isValidWord(currentGuess)) {
+	  setIsFlipping(true);
 	  const retval = evaluateGuess(currentGuess, solution);
 	  const newGuesses = [...guesses, retval];
 	  setGuesses(newGuesses);
@@ -58,7 +60,7 @@ const App = () => {
 	setRowAnimation('shake');
       }
     }
-  }, [currentGuess, guesses, gameStatus, showToast, solution]);
+  }, [currentGuess, guesses, gameStatus, showToast, solution, isFlipping]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -85,6 +87,7 @@ const App = () => {
 	gameStatus={gameStatus}
 	rowAnimation={rowAnimation}
 	onRowAnimationEnd={() => setRowAnimation('none')}
+	onTileAnimationEnd={() => setIsFlipping(false)}
       />
 
       <Keyboard

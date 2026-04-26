@@ -10,7 +10,7 @@ type AnimationProps = {
 type Props = AnimationProps & (
   | { status: 'empty' }
   | { status: 'active', letters: string }
-  | { status: 'committed', guess: EvaluatedGuess, });
+  | { status: 'committed', guess: EvaluatedGuess, onTileAnimationEnd: () => void })
 
 
 const Row = (props: Props) => {
@@ -27,7 +27,13 @@ const Row = (props: Props) => {
       return (
 	<div className={styles.row} data-animation={props.animation} onAnimationEnd={props.onAnimationEnd}>
 	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile key={i} letter={props.guess[i].letter} status={props.guess[i].status} index={i} animation={'flip'} />
+	    <Tile
+	      key={i}
+	      letter={props.guess[i].letter}
+	      status={props.guess[i].status}
+	      index={i}
+	      animation={'flip'}
+	      onAnimationEnd={i < 4 ? undefined : (e) => { if (e.animationName.includes('flipOut')) { props.onTileAnimationEnd() }}}/>
 	  ))}
 	</div>
       );
