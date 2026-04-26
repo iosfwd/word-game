@@ -13,25 +13,25 @@
 }
 
 .tile[data-status='correct'] {
-    background: green;
-    border-color: green;
+  background: green;
+  border-color: green;
 }
 .tile[data-status='present'] {
-    background: goldenrod;
-    border-color: goldenrod;
+  background: goldenrod;
+  border-color: goldenrod;
 }
 .tile[data-status='absent'] {
-    background: gray;
-    border-color: gray;
+  background: gray;
+  border-color: gray;
 }
 .tile[data-status='tbd'] {
-    border-color: gray;
+  border-color: gray;
 }
 
 .tile[data-status='correct'],
 .tile[data-status='present'],
 .tile[data-status='absent'] {
-    color: white;
+  color: white;
 }
 
 .tile[data-animation='pop'] {
@@ -39,13 +39,49 @@
 }
 
 @keyframes pop {
-    from {
-	transform: scale(0.8);
-	opacity: 0;
-    }
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
 
-    40% {
-	transform: scale(1.1);
-	opacity: 1;
-    }
+  40% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+.tile[data-animation='flip'] {
+  animation:
+    flipIn 0.25s ease-in,
+    flipOut 0.25s ease-out;
+  animation-delay:
+    calc(var(--index) * 0.3s),
+    calc(var(--index) * 0.3s + 0.25s);
+  animation-fill-mode:
+    backwards, forwards;
+
+}
+
+@keyframes flipIn {
+  from {
+    transform: rotateX(0deg);
+    background-color: white;
+    border-color: gray;
+    color: black;
+  }
+  to {
+    transform: rotateX(90deg);
+    background-color: white;
+    border-color: gray;
+    color: black;
+  }
+}
+
+@keyframes flipOut {
+  from {
+    transform: rotateX(90deg);
+  }
+  to   {
+    transform: rotateX(0deg);
+  }
 }

@@ -1,11 +1,11 @@
-import type { TileStatus, Animation } from '../types';
+import type { TileStatus, TileAnimation } from '../types';
 import styles from './tile.module.css';
 
 type Props = {
   letter?: string;
   status: TileStatus;
   index: number;
-  animation: Animation;
+  animation: TileAnimation;
 }
 
 const Tile = ({ letter = '', status = 'empty', index, animation }: Props) => {
@@ -14,6 +14,7 @@ const Tile = ({ letter = '', status = 'empty', index, animation }: Props) => {
       className={styles.tile}
       data-status={status}
       data-animation={animation}
+      style={{ '--index': index } as React.CSSProperties}
     >
       {letter}
     </div>
