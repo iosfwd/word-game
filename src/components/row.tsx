@@ -34,7 +34,7 @@ const Row = (props: Props) => {
     case 'empty':
     default:
       return (
-	<div className={styles.row} data-animation={props.animation} onAnimationEnd={props.onAnimationEnd}>
+	<div className={styles.row} data-animation={'none'} onAnimationEnd={() => {}}>
 	  {Array.from({ length: 5 }).map((_, i) => (
 	    <Tile key={i} status={'empty'} index={i} animation={'none'} />
 	  ))}
