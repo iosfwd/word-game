@@ -53,9 +53,9 @@ const App = () => {
 	  const newGameStatus = getGameStatus(newGuesses);
 
 	  if (newGameStatus === 'won') {
-	    const messages = ['genius', 'magnificent', 'impressive', 'splendid', 'great', 'phew'];
+	    const messages = ['Genius', 'Magnificent', 'Impressive', 'Splendid', 'Great', 'Phew'];
 	    const message = messages[newGuesses.length];
-	    showToast(message.toUpperCase());
+	    showToast(message);
 	  } else if (newGameStatus === 'lost') {
 	    showToast(solution.toUpperCase())
 	  }
