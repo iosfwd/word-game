@@ -14,39 +14,55 @@ type Props = AnimationProps & (
 
 
 const Row = (props: Props) => {
+  let tiles;
+
   switch (props.status) {
     case 'active':
-      return (
-	<div className={styles.row} data-animation={props.animation} onAnimationEnd={props.onAnimationEnd}>
-	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile key={i} letter={props.letters[i]} status={props.letters[i] ? 'tbd' : 'empty'} index={i} animation={props.letters[i] ? 'pop' : 'none'}/>
-	  ))}
-	</div>
-      );
+      tiles = Array.from({ length: 5 }).map((_, i) => (
+	<Tile
+	  key={i}
+	  letter={props.letters[i]}
+	  status={props.letters[i] ? 'tbd' : 'empty'}
+	  index={i}
+	  animation={props.letters[i] ? 'pop' : 'none'}
+	/>
+      ));
+      break;
     case 'committed':
-      return (
-	<div className={styles.row} data-animation={props.animation} onAnimationEnd={props.onAnimationEnd}>
-	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile
-	      key={i}
-	      letter={props.guess[i].letter}
-	      status={props.guess[i].status}
-	      index={i}
-	      animation={'flip'}
-	      onAnimationEnd={i < 4 ? undefined : (e) => { if (e.animationName.includes('flipOut')) { props.onTileAnimationEnd() }}}/>
-	  ))}
-	</div>
-      );
+      tiles = Array.from({ length: 5 }).map((_, i) => (
+	<Tile
+	  key={i}
+	  letter={props.guess[i].letter}
+	  status={props.guess[i].status}
+	  index={i}
+	  animation={'flip'}
+	  onAnimationEnd={i < 4 ? undefined : (e) => { if (e.animationName.includes('flipOut')) { props.onTileAnimationEnd() }}}
+	/>
+      ));
+      break;
     case 'empty':
     default:
-      return (
-	<div className={styles.row} data-animation={'none'} onAnimationEnd={() => {}}>
-	  {Array.from({ length: 5 }).map((_, i) => (
-	    <Tile key={i} status={'empty'} index={i} animation={'none'} />
-	  ))}
-	</div>
-      );
+      tiles = Array.from({ length: 5 }).map((_, i) => (
+	<Tile
+	  key={i}
+	  status={'empty'}
+	  index={i}
+	  animation={'none'}
+	/>
+      ));
+      break;
   }
+
+  return (
+    <div
+      className={styles.row}
+      data-animation={props.status === 'empty' ? 'none' : props.animation}
+      onAnimationEnd={props.status === 'empty' ? undefined : props.onAnimationEnd}
+    >
+      {tiles}
+    </div>
+  );
+
 }
 
 export default Row;
