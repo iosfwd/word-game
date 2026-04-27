@@ -62,7 +62,6 @@ const App = () => {
 
 	  setGameStatus(newGameStatus);
 	  setCurrentGuess('');
-	  setLetterStatuses(prev => updateLetterStatuses(prev, retval));
 	} else {
 	  showToast('Not in word list');
 	  setRowAnimation('shake');
@@ -103,7 +102,15 @@ const App = () => {
 	gameStatus={gameStatus}
 	rowAnimation={rowAnimation}
 	onRowAnimationEnd={() => setRowAnimation('none')}
-	onTileAnimationEnd={() => setIsFlipping(false)}
+	onTileAnimationEnd={() => {
+	  const lastGuess = guesses[guesses.length - 1];
+	  if (lastGuess) {
+	    setLetterStatuses(prev =>
+	      updateLetterStatuses(prev, lastGuess)
+	    );
+	  }
+	  setIsFlipping(false);
+	}}
       />
 
       <Keyboard
