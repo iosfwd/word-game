@@ -18,18 +18,30 @@ const App = () => {
   const [isFlipping, setIsFlipping]  = useState(false);
 
   const handleLetter = useCallback((letter: string) => {
+    if (isFlipping) {
+      return;
+    }
+
     if (currentGuess.length < 5 && gameStatus === 'ongoing') {
       setCurrentGuess(prev => prev + letter);
     }
-  }, [currentGuess, gameStatus]);
+  }, [currentGuess, gameStatus, isFlipping]);
 
   const handleBackspace = useCallback(() => {
+    if (isFlipping) {
+      return;
+    }
+
     if (gameStatus === 'ongoing') {
       setCurrentGuess(prev => prev.slice(0, -1))
     }
-  }, [gameStatus]);
+  }, [gameStatus, isFlipping]);
 
   const handleEnter = useCallback(() => {
+    if (isFlipping) {
+      return;
+    }
+
     if (gameStatus === 'ongoing') {
       if (currentGuess.length === 5) {
 	if (isValidWord(currentGuess)) {
@@ -62,7 +74,11 @@ const App = () => {
     }
   }, [currentGuess, guesses, gameStatus, showToast, solution, isFlipping]);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (isFlipping) {
+      return;
+    }
+
     if (e.key === 'Enter') {
       handleEnter();
     } else if (e.key === 'Backspace') {
@@ -70,7 +86,7 @@ const App = () => {
     } else if (/^[a-zA-Z]$/.test(e.key)) {
       handleLetter(e.key.toLowerCase());
     }
-  };
+  }, [handleBackspace, handleLetter, handleEnter, isFlipping]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
