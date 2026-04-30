@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 const useToast = (duration: number) => {
   const [toast, setToast] = useState<string | null>(null);
 
-  const showToast = (message: string) => { setToast(message); };
+  const showToast = (message: string) => {
+    setToast(message);
+  };
 
   useEffect(() => {
     if (toast === null) {
@@ -14,7 +16,9 @@ const useToast = (duration: number) => {
       setToast(null);
     }, duration);
 
-    return () => { clearTimeout(timer); };
+    return () => {
+      clearTimeout(timer);
+    };
   }, [toast, duration]);
 
   return { toast, showToast };

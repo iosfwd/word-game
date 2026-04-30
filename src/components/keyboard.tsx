@@ -27,7 +27,9 @@ const Keyboard = ({
             key={label}
             label={label}
             status={letterStatuses.get(label)}
-            onClick={() => { onLetter(label); }}
+            onClick={() => {
+              onLetter(label);
+            }}
           />
         ))}
       </div>
@@ -37,7 +39,9 @@ const Keyboard = ({
             key={label}
             label={label}
             status={letterStatuses.get(label)}
-            onClick={() => { onLetter(label); }}
+            onClick={() => {
+              onLetter(label);
+            }}
           />
         ))}
       </div>
@@ -48,7 +52,9 @@ const Keyboard = ({
             key={label}
             label={label}
             status={letterStatuses.get(label)}
-            onClick={() => { onLetter(label); }}
+            onClick={() => {
+              onLetter(label);
+            }}
           />
         ))}
         <Key key={"del"} label={"del"} onClick={onBackspace} wide={true} />
