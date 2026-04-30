@@ -8,7 +8,7 @@ import {
   updateLetterStatuses,
 } from "./utils";
 import type { EvaluatedGuess, GameStatus, KeyStatus, Phase } from "./types";
-import styles from "./App.module.css";
+import styles from "./app.module.css";
 import { useState, useEffect, useCallback } from "react";
 import Keyboard from "./components/keyboard";
 import Toast from "./components/toast";
