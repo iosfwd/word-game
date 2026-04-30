@@ -2,12 +2,12 @@ import Row from "./row";
 import type { EvaluatedGuess, Phase } from "../types";
 import styles from "./board.module.css";
 
-type Props = {
+interface Props {
   guesses: EvaluatedGuess[];
   currentGuess: string;
   phase: Phase;
   onPhaseEnd: () => void;
-};
+}
 
 const Board = ({ guesses, currentGuess, phase, onPhaseEnd }: Props) => {
   return (

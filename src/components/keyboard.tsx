@@ -6,12 +6,12 @@ const TOP_ROW = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
 const MID_ROW = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
 const BOT_ROW = ["z", "x", "c", "v", "b", "n", "m"];
 
-type Props = {
+interface Props {
   onLetter: (letter: string) => void;
   onBackspace: () => void;
   onEnter: () => void;
   letterStatuses: Map<string, KeyStatus>;
-};
+}
 
 const Keyboard = ({
   onLetter,
@@ -27,7 +27,7 @@ const Keyboard = ({
             key={label}
             label={label}
             status={letterStatuses.get(label)}
-            onClick={() => onLetter(label)}
+            onClick={() => { onLetter(label); }}
           />
         ))}
       </div>
@@ -37,7 +37,7 @@ const Keyboard = ({
             key={label}
             label={label}
             status={letterStatuses.get(label)}
-            onClick={() => onLetter(label)}
+            onClick={() => { onLetter(label); }}
           />
         ))}
       </div>
@@ -48,7 +48,7 @@ const Keyboard = ({
             key={label}
             label={label}
             status={letterStatuses.get(label)}
-            onClick={() => onLetter(label)}
+            onClick={() => { onLetter(label); }}
           />
         ))}
         <Key key={"del"} label={"del"} onClick={onBackspace} wide={true} />

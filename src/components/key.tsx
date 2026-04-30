@@ -1,12 +1,12 @@
 import type { KeyStatus } from "../types";
 import styles from "./key.module.css";
 
-type Props = {
+interface Props {
   label: string;
   status?: KeyStatus;
   onClick: () => void;
   wide?: boolean;
-};
+}
 
 const Key = ({ label, status = "unused", onClick, wide }: Props) => {
   return (

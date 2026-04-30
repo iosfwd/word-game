@@ -6,7 +6,7 @@ import type {
 } from "./types.ts";
 import { WORD_LIST } from "./data.ts";
 
-const WORD_SET: Set<string> = new Set(WORD_LIST);
+const WORD_SET = new Set<string>(WORD_LIST);
 
 export const evaluateGuess = (
   guess: string,
@@ -103,7 +103,7 @@ export const updateLetterStatus = (
   letter: string,
   status: LetterStatus,
 ): Map<string, KeyStatus> => {
-  const statusWeight = STATUS_WEIGHT[status ?? "unused"];
+  const statusWeight = STATUS_WEIGHT[status];
   const prev = statuses.get(letter);
   const prevWeight = STATUS_WEIGHT[prev ?? "unused"];
 

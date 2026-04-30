@@ -1,17 +1,17 @@
 import type { TileStatus, TileAnimation } from "../types";
 import styles from "./tile.module.css";
 
-type Props = {
+interface Props {
   letter?: string;
   status: TileStatus;
   index: number;
   animation: TileAnimation;
   onAnimationEnd?: (e: React.AnimationEvent<HTMLDivElement>) => void;
-};
+}
 
 const Tile = ({
   letter = "",
-  status = "empty",
+  status,
   index,
   animation,
   onAnimationEnd,

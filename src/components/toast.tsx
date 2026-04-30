@@ -1,8 +1,8 @@
 import styles from "./toast.module.css";
 
-type Props = {
+interface Props {
   message: string | null;
-};
+}
 
 const Toast = ({ message }: Props) => {
   if (message === null) {
