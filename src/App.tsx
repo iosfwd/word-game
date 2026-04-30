@@ -14,13 +14,13 @@ import Keyboard from "./components/keyboard";
 import Toast from "./components/toast";
 import useToast from "./hooks/useToast";
 
-type State = {
+interface State {
   guesses: EvaluatedGuess[];
   currentGuess: string;
   solution: string;
   phase: Phase;
   letterStatuses: Map<string, KeyStatus>;
-};
+}
 
 type Action =
   | { type: "ADD_LETTER"; letter: string }
@@ -28,6 +28,16 @@ type Action =
   | { type: "SUBMIT_GUESS" }
   | { type: "ANIMATION_END" }
   | { type: "RESET" };
+
+const initGameState = (): State => {
+  return {
+    guesses: [],
+    currentGuess: "",
+    solution: getRandomWord(),
+    phase: "idle",
+    letterStatuses: initLetterStatuses(),
+  };
+};
 
 const reducer = (state: State, action: Action): State => {
   const gameStatus = getGameStatus(state.guesses);
@@ -111,28 +121,12 @@ const reducer = (state: State, action: Action): State => {
       }
     }
     case "RESET": {
-      return {
-        guesses: [],
-        currentGuess: "",
-        solution: getRandomWord(),
-        phase: "idle",
-        letterStatuses: initLetterStatuses(),
-      };
+      return initGameState();
     }
     default: {
       return state;
     }
   }
-};
-
-const initGameState = (): State => {
-  return {
-    guesses: [],
-    currentGuess: "",
-    solution: getRandomWord(),
-    phase: "idle",
-    letterStatuses: initLetterStatuses(),
-  };
 };
 
 const App = () => {
@@ -155,15 +149,18 @@ const App = () => {
     dispatch({ type: "ANIMATION_END" });
   }, []);
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleEnter();
-    } else if (e.key === "Backspace") {
-      handleBackspace();
-    } else if (/^[a-zA-Z]$/.test(e.key)) {
-      handleLetter(e.key.toLowerCase());
-    }
-  }, []);
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        handleEnter();
+      } else if (e.key === "Backspace") {
+        handleBackspace();
+      } else if (/^[a-zA-Z]$/.test(e.key)) {
+        handleLetter(e.key.toLowerCase());
+      }
+    },
+    [handleLetter, handleEnter, handleBackspace],
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
