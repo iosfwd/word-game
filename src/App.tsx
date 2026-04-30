@@ -24,16 +24,14 @@ const App = () => {
   const { toast, showToast } = useToast(2000);
   const [phase, setPhase] = useState<Phase>("idle");
 
-  console.log(solution);
-
   const handleLetter = useCallback(
     (letter: string) => {
       if (phase !== "idle") {
-        return;
+	return;
       }
 
       if (currentGuess.length < 5 && gameStatus === "ongoing") {
-        setCurrentGuess((prev) => prev + letter);
+	setCurrentGuess((prev) => prev + letter);
       }
     },
     [currentGuess, gameStatus, phase],
@@ -87,22 +85,22 @@ const App = () => {
       setLetterStatuses((prev) => updateLetterStatuses(prev, lastGuess));
 
       if (gameStatus === "won") {
-        setPhase("bouncing");
-        const messages = [
-          "Genius",
-          "Magnificent",
-          "Impressive",
-          "Splendid",
-          "Great",
-          "Phew",
-        ];
-        const message = messages[guesses.length - 1];
-        showToast(message);
+	setPhase("bouncing");
+	const messages = [
+	  "Genius",
+	  "Magnificent",
+	  "Impressive",
+	  "Splendid",
+	  "Great",
+	  "Phew",
+	];
+	const message = messages[guesses.length - 1];
+	showToast(message);
       } else if (gameStatus === "lost") {
-        setPhase("done");
-        showToast(solution.toUpperCase());
+	setPhase("done");
+	showToast(solution.toUpperCase());
       } else {
-        setPhase("idle");
+	setPhase("idle");
       }
     }
 
@@ -116,15 +114,15 @@ const App = () => {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (phase !== "idle") {
-        return;
+	return;
       }
 
       if (e.key === "Enter") {
-        handleEnter();
+	handleEnter();
       } else if (e.key === "Backspace") {
-        handleBackspace();
+	handleBackspace();
       } else if (/^[a-zA-Z]$/.test(e.key)) {
-        handleLetter(e.key.toLowerCase());
+	handleLetter(e.key.toLowerCase());
       }
     },
     [handleBackspace, handleLetter, handleEnter, phase],
@@ -140,17 +138,17 @@ const App = () => {
       <Toast message={toast} />
 
       <Board
-        guesses={guesses}
-        currentGuess={currentGuess}
-        phase={phase}
-        onPhaseEnd={onPhaseEnd}
+	guesses={guesses}
+	currentGuess={currentGuess}
+	phase={phase}
+	onPhaseEnd={onPhaseEnd}
       />
 
       <Keyboard
-        onLetter={handleLetter}
-        onBackspace={handleBackspace}
-        onEnter={handleEnter}
-        letterStatuses={letterStatuses}
+	onLetter={handleLetter}
+	onBackspace={handleBackspace}
+	onEnter={handleEnter}
+	letterStatuses={letterStatuses}
       />
     </div>
   );
