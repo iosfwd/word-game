@@ -6,6 +6,7 @@ import {
   getGameStatus,
   initLetterStatuses,
   updateLetterStatuses,
+  getWinMessage,
 } from "./utils";
 import type { EvaluatedGuess, KeyStatus, Phase } from "./types";
 import styles from "./app.module.css";
@@ -181,15 +182,7 @@ const App = () => {
     const gameStatus = getGameStatus(state.guesses);
 
     if (state.phase === "bouncing" && gameStatus === "won") {
-      const messages = [
-        "Genius",
-        "Magnificent",
-        "Impressive",
-        "Splendid",
-        "Great",
-        "Phew",
-      ];
-      const message = messages[state.guesses.length - 1];
+      const message = getWinMessage(state.guesses.length);
       showToast(message);
     }
 

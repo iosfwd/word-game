@@ -124,3 +124,16 @@ export const updateLetterStatuses = (
     return updateLetterStatus(acc, letter, status);
   }, statuses);
 };
+
+const WIN_MESSAGES = [
+  "Genius",
+  "Magnificent",
+  "Impressive",
+  "Splendid",
+  "Great",
+  "Phew",
+] as const;
+
+export const getWinMessage = (guessCount: number) => {
+  return WIN_MESSAGES[guessCount - 1];
+};
