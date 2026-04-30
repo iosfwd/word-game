@@ -17,19 +17,19 @@
   cursor: pointer;
 }
 
-.key[data-status='correct'] {
+.key[data-status="correct"] {
   background: green;
 }
-.key[data-status='present'] {
+.key[data-status="present"] {
   background: goldenrod;
 }
-.key[data-status='absent'] {
+.key[data-status="absent"] {
   background: gray;
 }
 
-.key[data-status='correct'],
-.key[data-status='present'],
-.key[data-status='absent'] {
+.key[data-status="correct"],
+.key[data-status="present"],
+.key[data-status="absent"] {
   color: white;
 }
 

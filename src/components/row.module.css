@@ -3,28 +3,24 @@
   gap: 4px;
 }
 
-.row[data-animation='shake'] {
+.row[data-animation="shake"] {
   animation: shake 0.5s;
 }
 
 @keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  50% { transform: translateX(4px); }
-  75% { transform: translateX(-4px); }
-  100% { transform: translateX(0); }
-}
-
-.row[data-animation='bounce'] {
-  animation: bounce 1s;
-}
-
-@keyframes bounce {
-  0%,
-  20% { transform: translateY(0); }
-  40% { transform: translateY(-30px); }
-  50% { transform: translateY(5px); }
-  60% { transform: translateY(-15px); }
-  80% { transform: translateY(2px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }

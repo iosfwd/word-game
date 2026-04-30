@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 const useToast = (duration: number) => {
   const [toast, setToast] = useState<string | null>(null);
@@ -18,6 +18,6 @@ const useToast = (duration: number) => {
   }, [toast, duration]);
 
   return { toast, showToast };
-}
+};
 
 export default useToast;
