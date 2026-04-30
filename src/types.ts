@@ -18,3 +18,18 @@ export type TileAnimation = "pop" | "flip" | "bounce" | "none";
 export type RowAnimation = "shake" | "none";
 
 export type Phase = "idle" | "shaking" | "flipping" | "bouncing" | "done";
+
+export interface State {
+  guesses: EvaluatedGuess[];
+  currentGuess: string;
+  solution: string;
+  phase: Phase;
+  letterStatuses: Map<string, KeyStatus>;
+}
+
+export type Action =
+  | { type: "ADD_LETTER"; letter: string }
+  | { type: "DEL_LETTER" }
+  | { type: "SUBMIT_GUESS" }
+  | { type: "ANIMATION_END" }
+  | { type: "RESET" };

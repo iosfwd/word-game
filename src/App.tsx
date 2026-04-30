@@ -1,137 +1,14 @@
 import Board from "./components/board";
-import {
-  evaluateGuess,
-  isValidWord,
-  getRandomWord,
-  getGameStatus,
-  initLetterStatuses,
-  updateLetterStatuses,
-  getWinMessage,
-} from "./utils";
-import type { EvaluatedGuess, KeyStatus, Phase } from "./types";
+import { getGameStatus, getWinMessage } from "./utils";
 import styles from "./app.module.css";
 import { useEffect, useCallback, useReducer } from "react";
 import Keyboard from "./components/keyboard";
 import Toast from "./components/toast";
 import useToast from "./hooks/useToast";
-
-interface State {
-  guesses: EvaluatedGuess[];
-  currentGuess: string;
-  solution: string;
-  phase: Phase;
-  letterStatuses: Map<string, KeyStatus>;
-}
-
-type Action =
-  | { type: "ADD_LETTER"; letter: string }
-  | { type: "DEL_LETTER" }
-  | { type: "SUBMIT_GUESS" }
-  | { type: "ANIMATION_END" }
-  | { type: "RESET" };
-
-const initGameState = (): State => {
-  return {
-    guesses: [],
-    currentGuess: "",
-    solution: getRandomWord(),
-    phase: "idle",
-    letterStatuses: initLetterStatuses(),
-  };
-};
-
-const reducer = (state: State, action: Action): State => {
-  const gameStatus = getGameStatus(state.guesses);
-  const canInteract = state.phase === "idle" && gameStatus === "ongoing";
-
-  switch (action.type) {
-    case "ADD_LETTER": {
-      if (!canInteract || state.currentGuess.length >= 5) {
-        return state;
-      }
-
-      return { ...state, currentGuess: state.currentGuess + action.letter };
-    }
-    case "DEL_LETTER": {
-      if (!canInteract) {
-        return state;
-      }
-
-      return { ...state, currentGuess: state.currentGuess.slice(0, -1) };
-    }
-    case "SUBMIT_GUESS": {
-      if (!canInteract) {
-        return state;
-      }
-
-      if (state.currentGuess.length !== 5) {
-        return { ...state, phase: "shaking" };
-      }
-
-      if (!isValidWord(state.currentGuess)) {
-        return { ...state, phase: "shaking" };
-      }
-
-      const evaluated = evaluateGuess(state.currentGuess, state.solution);
-      return {
-        ...state,
-        guesses: [...state.guesses, evaluated],
-        currentGuess: "",
-        phase: "flipping",
-      };
-    }
-    case "ANIMATION_END": {
-      switch (state.phase) {
-        case "flipping": {
-          const lastGuess = state.guesses[state.guesses.length - 1];
-          const newLetterStatuses = updateLetterStatuses(
-            state.letterStatuses,
-            lastGuess,
-          );
-
-          if (gameStatus === "won") {
-            return {
-              ...state,
-              phase: "bouncing",
-              letterStatuses: newLetterStatuses,
-            };
-          }
-
-          if (gameStatus === "lost") {
-            return {
-              ...state,
-              phase: "done",
-              letterStatuses: newLetterStatuses,
-            };
-          }
-
-          return { ...state, phase: "idle", letterStatuses: newLetterStatuses };
-        }
-
-        case "shaking": {
-          return { ...state, phase: "idle" };
-        }
-
-        case "bouncing": {
-          return { ...state, phase: "done" };
-        }
-
-        default: {
-          return state;
-        }
-      }
-    }
-    case "RESET": {
-      return initGameState();
-    }
-    default: {
-      return state;
-    }
-  }
-};
+import { reducer, initState } from "./reducer";
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, undefined, initGameState);
+  const [state, dispatch] = useReducer(reducer, undefined, initState);
   const { toast, showToast } = useToast(2000);
 
   const handleLetter = useCallback((letter: string) => {
