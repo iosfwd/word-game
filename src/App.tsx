@@ -7,7 +7,7 @@ import {
   initLetterStatuses,
   updateLetterStatuses,
 } from "./utils";
-import type { EvaluatedGuess, GameStatus, KeyStatus, Phase } from "./types";
+import type { EvaluatedGuess, KeyStatus, Phase } from "./types";
 import styles from "./app.module.css";
 import { useState, useEffect, useCallback } from "react";
 import Keyboard from "./components/keyboard";
@@ -15,105 +15,111 @@ import Toast from "./components/toast";
 import useToast from "./hooks/useToast";
 
 const App = () => {
-  const [solution] = useState<string>(getRandomWord());
   const [guesses, setGuesses] = useState<EvaluatedGuess[]>([]);
+  const [solution] = useState<string>(getRandomWord);
   const [currentGuess, setCurrentGuess] = useState<string>("");
-  const [gameStatus, setGameStatus] = useState<GameStatus>("ongoing");
-  const [letterStatuses, setLetterStatuses] =
-    useState<Map<string, KeyStatus>>(initLetterStatuses); // lazy init
-  const { toast, showToast } = useToast(2000);
   const [phase, setPhase] = useState<Phase>("idle");
+  const { toast, showToast } = useToast(2000);
+  const [letterStatuses, setLetterStatuses] =
+    useState<Map<string, KeyStatus>>(initLetterStatuses);
+
+  const gameStatus = getGameStatus(guesses);
+  const canInteract = phase === "idle" && gameStatus === "ongoing";
 
   const handleLetter = useCallback(
     (letter: string) => {
-      if (phase !== "idle") {
+      if (!canInteract) {
         return;
       }
 
-      if (currentGuess.length < 5 && gameStatus === "ongoing") {
+      if (currentGuess.length < 5) {
         setCurrentGuess((prev) => prev + letter);
       }
     },
-    [currentGuess, gameStatus, phase],
+    [currentGuess, canInteract],
   );
 
   const handleBackspace = useCallback(() => {
-    if (phase !== "idle") {
+    if (!canInteract) {
       return;
     }
 
-    if (gameStatus === "ongoing") {
-      setCurrentGuess((prev) => prev.slice(0, -1));
-    }
-  }, [gameStatus, phase]);
+    setCurrentGuess((prev) => prev.slice(0, -1));
+  }, [canInteract]);
 
   const handleEnter = useCallback(() => {
-    if (phase !== "idle") {
-      return;
-    }
-
-    if (gameStatus !== "ongoing") {
+    if (!canInteract) {
       return;
     }
 
     if (currentGuess.length !== 5) {
-      showToast("Not enough letters");
       setPhase("shaking");
+      showToast("Not enough letters");
       return;
     }
 
     if (!isValidWord(currentGuess)) {
-      showToast("Not in word list");
       setPhase("shaking");
+      showToast("Not in word list");
       return;
     }
 
-    const retval = evaluateGuess(currentGuess, solution);
-    const newGuesses = [...guesses, retval];
-    const newGameStatus = getGameStatus(newGuesses);
-
-    setGuesses(newGuesses);
-    setGameStatus(newGameStatus);
+    const evaluated = evaluateGuess(currentGuess, solution);
+    setGuesses((prev) => [...prev, evaluated]);
     setCurrentGuess("");
-
     setPhase("flipping");
-  }, [currentGuess, guesses, gameStatus, showToast, solution, phase]);
+  }, [currentGuess, showToast, solution, canInteract]);
 
   const onPhaseEnd = useCallback(() => {
-    if (phase === "flipping") {
-      const lastGuess = guesses[guesses.length - 1];
-      setLetterStatuses((prev) => updateLetterStatuses(prev, lastGuess));
+    switch (phase) {
+      case "flipping": {
+        const lastGuess = guesses[guesses.length - 1];
+        setLetterStatuses((prev) => updateLetterStatuses(prev, lastGuess));
 
-      if (gameStatus === "won") {
-        setPhase("bouncing");
-        const messages = [
-          "Genius",
-          "Magnificent",
-          "Impressive",
-          "Splendid",
-          "Great",
-          "Phew",
-        ];
-        const message = messages[guesses.length - 1];
-        showToast(message);
-      } else if (gameStatus === "lost") {
-        setPhase("done");
-        showToast(solution.toUpperCase());
-      } else {
+        if (gameStatus === "won") {
+          setPhase("bouncing");
+          const messages = [
+            "Genius",
+            "Magnificent",
+            "Impressive",
+            "Splendid",
+            "Great",
+            "Phew",
+          ];
+          const message = messages[guesses.length - 1];
+          showToast(message);
+          return;
+        }
+
+        if (gameStatus === "lost") {
+          setPhase("done");
+          showToast(solution.toUpperCase());
+          return;
+        }
+
         setPhase("idle");
+        return;
       }
-    }
 
-    if (phase === "shaking") {
-      setPhase("idle");
-    } else if (phase === "bouncing") {
-      setPhase("done");
+      case "shaking": {
+        setPhase("idle");
+        return;
+      }
+
+      case "bouncing": {
+        setPhase("done");
+        return;
+      }
+
+      default: {
+        return;
+      }
     }
   }, [phase, gameStatus, showToast, solution, guesses]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (phase !== "idle") {
+      if (!canInteract) {
         return;
       }
 
@@ -125,7 +131,7 @@ const App = () => {
         handleLetter(e.key.toLowerCase());
       }
     },
-    [handleBackspace, handleLetter, handleEnter, phase],
+    [handleBackspace, handleLetter, handleEnter, canInteract],
   );
 
   useEffect(() => {
