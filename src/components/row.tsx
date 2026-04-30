@@ -68,7 +68,7 @@ const Row = (props: Props) => {
                         e.animationName.includes("flipOut") ||
                         e.animationName.includes("bounce")
                       ) {
-                        props.onPhaseEnd();
+                        props.onPhaseEnd?.();
                       }
                     }
               }
