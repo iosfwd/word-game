@@ -15,37 +15,35 @@ const Board = ({ guesses, currentGuess, phase, onPhaseEnd }: Props) => {
       {Array.from({ length: 6 }).map((_, i) => {
         if (i < guesses.length - 1) {
           return (
-            <Row
-              key={i}
-              status={"committed"}
-              guess={guesses[i]}
-              phase={"idle"}
-              onPhaseEnd={undefined}
-            />
+            <Row key={i} status="committed" guess={guesses[i]} phase="idle" />
           );
-        } else if (i === guesses.length - 1) {
+        }
+
+        if (i === guesses.length - 1) {
           return (
             <Row
               key={i}
-              status={"committed"}
+              status="committed"
               guess={guesses[i]}
               phase={phase}
               onPhaseEnd={onPhaseEnd}
             />
           );
-        } else if (i === guesses.length) {
+        }
+
+        if (i === guesses.length) {
           return (
             <Row
               key={i}
-              status={"active"}
+              status="active"
               letters={currentGuess}
               phase={phase}
               onPhaseEnd={phase === "shaking" ? onPhaseEnd : undefined}
             />
           );
-        } else {
-          return <Row key={i} status={"empty"} phase={"idle"} />;
         }
+
+        return <Row key={i} status="empty" phase="idle" />;
       })}
     </div>
   );
