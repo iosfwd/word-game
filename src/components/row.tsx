@@ -1,4 +1,4 @@
-import type { EvaluatedGuess, Phase, TileAnimation } from "../types";
+import type { EvaluatedGuess, Phase } from "../types";
 import Tile from "./tile";
 import styles from "./row.module.css";
 
@@ -12,90 +12,165 @@ type Props =
       onPhaseEnd?: () => void;
     };
 
+const ActiveRow = ({ letters }: { letters: string }) => {
+  return (
+    <div className={styles.row}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Tile
+          key={i}
+          letter={letters[i]}
+          status={letters[i] ? "tbd" : "empty"}
+          index={i}
+          animation={letters[i] ? "pop" : "none"}
+        />
+      ))}
+    </div>
+  );
+};
+
+const ShakingRow = ({
+  letters,
+  onPhaseEnd,
+}: {
+  letters: string;
+  onPhaseEnd: () => void;
+}) => {
+  return (
+    <div
+      className={styles.row}
+      data-animation="shake"
+      onAnimationEnd={onPhaseEnd}
+    >
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Tile
+          key={i}
+          letter={letters[i]}
+          status={letters[i] ? "tbd" : "empty"}
+          index={i}
+          animation={"none"}
+        />
+      ))}
+    </div>
+  );
+};
+
+const FlippingRow = ({
+  guess,
+  onPhaseEnd,
+}: {
+  guess: EvaluatedGuess;
+  onPhaseEnd: () => void;
+}) => {
+  return (
+    <div className={styles.row}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Tile
+          key={i}
+          letter={guess[i].letter}
+          status={guess[i].status}
+          index={i}
+          animation="flip"
+          onAnimationEnd={
+            i < 4
+              ? undefined
+              : (e) => {
+                  if (e.animationName.includes("flipOut")) {
+                    onPhaseEnd();
+                  }
+                }
+          }
+        />
+      ))}
+    </div>
+  );
+};
+
+const BouncingRow = ({
+  guess,
+  onPhaseEnd,
+}: {
+  guess: EvaluatedGuess;
+  onPhaseEnd: () => void;
+}) => {
+  return (
+    <div className={styles.row}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Tile
+          key={i}
+          letter={guess[i].letter}
+          status={guess[i].status}
+          index={i}
+          animation="bounce"
+          onAnimationEnd={
+            i < 4
+              ? undefined
+              : (e) => {
+                  if (e.animationName.includes("bounce")) {
+                    onPhaseEnd();
+                  }
+                }
+          }
+        />
+      ))}
+    </div>
+  );
+};
+
+const CommittedRow = ({ guess }: { guess: EvaluatedGuess }) => {
+  return (
+    <div className={styles.row}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Tile
+          key={i}
+          letter={guess[i].letter}
+          status={guess[i].status}
+          index={i}
+          animation="none"
+        />
+      ))}
+    </div>
+  );
+};
+
+const EmptyRow = () => {
+  return (
+    <div className={styles.row}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Tile key={i} status="empty" index={i} animation="none" />
+      ))}
+    </div>
+  );
+};
+
 const Row = (props: Props) => {
-  const rowAnimation = props.phase === "shaking" ? "shake" : "none";
-
-  let tileAnimation: TileAnimation = "none";
-
-  if (props.phase === "flipping") {
-    tileAnimation = "flip";
-  } else if (props.phase === "bouncing") {
-    tileAnimation = "bounce";
-  }
-
   switch (props.status) {
     case "active": {
-      return (
-        <div
-          className={styles.row}
-          data-animation={rowAnimation}
-          onAnimationEnd={
-            props.phase === "shaking" ? props.onPhaseEnd : undefined
-          }
-        >
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Tile
-              key={i}
-              letter={props.letters[i]}
-              status={props.letters[i] ? "tbd" : "empty"}
-              index={i}
-              animation={props.letters[i] ? "pop" : "none"}
-              onAnimationEnd={undefined}
-            />
-          ))}
-        </div>
-      );
+      if (props.phase === "shaking") {
+        return (
+          <ShakingRow letters={props.letters} onPhaseEnd={props.onPhaseEnd} />
+        );
+      }
+
+      return <ActiveRow letters={props.letters} />;
     }
     case "committed": {
-      return (
-        <div
-          className={styles.row}
-          data-animation={"none"}
-          onAnimationEnd={undefined}
-        >
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Tile
-              key={i}
-              letter={props.guess[i].letter}
-              status={props.guess[i].status}
-              index={i}
-              animation={tileAnimation}
-              onAnimationEnd={
-                i < 4
-                  ? undefined
-                  : (e) => {
-                      if (
-                        e.animationName.includes("flipOut") ||
-                        e.animationName.includes("bounce")
-                      ) {
-                        props.onPhaseEnd?.();
-                      }
-                    }
-              }
-            />
-          ))}
-        </div>
-      );
+      if (props.phase === "flipping") {
+        return (
+          <FlippingRow guess={props.guess} onPhaseEnd={props.onPhaseEnd} />
+        );
+      }
+
+      if (props.phase === "bouncing") {
+        return (
+          <BouncingRow guess={props.guess} onPhaseEnd={props.onPhaseEnd} />
+        );
+      }
+
+      return <CommittedRow guess={props.guess} />;
     }
     case "empty":
     default: {
-      return (
-        <div
-          className={styles.row}
-          data-animation={"none"}
-          onAnimationEnd={undefined}
-        >
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Tile
-              key={i}
-              status="empty"
-              index={i}
-              animation="none"
-              onAnimationEnd={undefined}
-            />
-          ))}
-        </div>
-      );
+      return <EmptyRow />;
     }
   }
 };
