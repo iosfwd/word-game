@@ -58,17 +58,19 @@ const App = () => {
 
     const gameStatus = getGameStatus(state.guesses);
 
-    if (state.phase === "done" && gameStatus === "won") {
+    if (state.phase === "bouncing" && gameStatus === "won") {
       const message = getWinMessage(state.guesses.length);
       showToast(message);
-      dispatch({ type: "ANIMATION_END" });
     }
+  }, [state.phase, state.currentGuess.length, state.guesses, showToast]);
+
+  useEffect(() => {
+    const gameStatus = getGameStatus(state.guesses);
 
     if (state.phase === "done" && gameStatus === "lost") {
       showToast(state.solution.toUpperCase());
-      dispatch({ type: "ANIMATION_END" });
     }
-  }, [state, showToast]);
+  }, [state.phase, state.guesses, state.solution, showToast]);
 
   return (
     <div className={styles.app}>
