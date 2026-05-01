@@ -17,7 +17,7 @@ export type TileAnimation = "pop" | "flip" | "bounce" | "none";
 
 export type RowAnimation = "shake" | "none";
 
-export type Phase = "idle" | "shaking" | "flipping" | "bouncing" | "done";
+export type Phase = "idle" | "shaking" | "flipping" | "bouncing" | "done" | "over";
 
 export interface State {
   guesses: EvaluatedGuess[];
